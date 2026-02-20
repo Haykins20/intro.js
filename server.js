@@ -1,23 +1,20 @@
-const express = require('express')
-const app = express()
-const port = 3000
 
-
+const express = require("express");
+const app = express();
 app.use(express.json());
 
-app.get('/user/:id', (req, res) => {
-  res.send('Hello merlin!')
-})
-app.get('/', (req, res) => {
-  res.send('MY WEEK TWO API!')
-})
-app.use((req, res, next) => {
-  console.log('');
-  next();
-})
-app.post("/echo", (req, res)=> {
-  res.json({echoed: req.body});
+
+app.get("/", (req, res) => res.send("MY WEEK TWO API"));
+
+app.post("/user", (req, res) =>  {
+    const { name, email } = req.body;
+    res.send('Hello, [name]!');
+    if (!name || !email) return res.status(400).json({ error: "missing data" });
 });
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+
+app.get("/user/:[id]", (req, res) => {
+    res.json({ id: req.params.id, name: "User [id] profile" });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log('API live on port ${PORT}'));
